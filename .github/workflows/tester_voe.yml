@@ -20,8 +20,8 @@ jobs:
 
             - name: Ejecutar script
               env: 
-                  DB_KEY: ${{ secrets.DB_KEY }}
-                  DB_URL: ${{ secrets.DB_URL }}
+                  SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+                  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
                   API_KEY_VOE: ${{ secrets.API_KEY_VOE }}
               run: python src/utils/test_voe.py
 
