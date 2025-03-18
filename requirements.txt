@@ -3,3 +3,4 @@ python-dotenv
 icecream
 imagekitio
 opencv-python
+-e .
