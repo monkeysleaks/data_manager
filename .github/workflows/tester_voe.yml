@@ -1,0 +1,32 @@
+name: Voe tester
+
+on:
+    workflow_dispatch:
+
+jobs:
+    run-python-script:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Clonar el repositorio
+              uses: actions/checkout@v4
+
+            - name: Configurar Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: '3.10'
+            
+            - name: Instalar dependencias
+              run: pip install -r requirements.txt
+
+            - name: Ejecutar script
+              env: 
+                  DB_KEY: ${{ secrets.DB_KEY }}
+                  DB_URL: ${{ secrets.DB_URL }}
+                  API_KEY_VOE: ${{ secrets.API_KEY_VOE }}
+              run: python src/utils/test_voe.py
+
+            - name: Subir archivo de fallas
+              uses: actions/upload-artifact@v4
+              with:
+                  name: fallas
+                  path: fallas.md

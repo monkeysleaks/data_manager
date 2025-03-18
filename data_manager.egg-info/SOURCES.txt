@@ -1,0 +1,17 @@
+README.md
+setup.py
+data_manager.egg-info/PKG-INFO
+data_manager.egg-info/SOURCES.txt
+data_manager.egg-info/dependency_links.txt
+data_manager.egg-info/top_level.txt
+src/__init__.py
+src/api/__init__.py
+src/api/supabase_api.py
+src/database/CRUD.py
+src/database/__init__.py
+src/monitor/__init__.py
+src/upload/__init__.py
+src/upload/uploader_filemoon.py
+src/upload/uploader_voe.py
+src/utils/__init__.py
+src/utils/test_voe.py
