@@ -25,7 +25,7 @@ for artista in artistas:
                     file.close()
                 print(f"falla en {video['code_voe']}")
             else:
-                print(f"video {video["title"]}, {video['code_voe']} es válido")
+                print(f"video {video['title']}, {video['code_voe']} es válido")
         except Exception as e:
             print(f"ocurrio un error: {e}")
 
