@@ -86,7 +86,15 @@ def abrir_json(artista):
     with open (path, "r") as file:
         datos = json.load(file)
         for dato in datos:
-            info = {"title": f"{dato["title"]}","code_voe" : f"{dato["code_voe"]}", "code_filemoon": f"{dato["code_filemoon"]}", "length" : f"{dato["length"]}", "file_size": f"{dato["file size"]}", "img": f"{dato["img"]}", "portal": "false"}
+            info = {
+        "title": f"{dato['title']}",
+        "code_voe": f"{dato['code_voe']}",
+        "code_filemoon": f"{dato['code_filemoon']}",
+        "length": f"{dato['length']}",
+        "file_size": f"{dato['file size']}",
+        "img": f"{dato['img']}",
+        "portal": "false"
+        }
             informacion.append(info)
     return informacion
 
