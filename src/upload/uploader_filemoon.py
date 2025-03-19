@@ -5,14 +5,10 @@ import os
 import time
 import csv
 from icecream import ic
-from ssl import SSLEOFError
 import winsound
 
 
-api_key = "64114w546fgsans2jr5o2"
-folder_id = ""
-artista = input("nombre artista: ")
-ruta_csv = f"E:/datos/Filemoon.csv"
+
 
 
 def info_cuenta(api_key):
@@ -23,6 +19,21 @@ def info_cuenta(api_key):
         print(data)
     else:
         print(response)
+
+def get_folders(token):
+    url = f"https://filemoonapi.com/api/folder/list?key={token}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json() # recibe los datos en formato json
+        print(data)
+
+def set_folder(token, filecode, folder_id_destino):
+    url = f"https://filemoonapi.com/api/file/clone?key={token}&file_code={filecode}&fld_id={folder_id_destino}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json() # recibe los datos en formato json
+        print(data)
+    
 
 def info_carpeta(api_key, folder_id):
     url= f"https://filemoonapi.com/api/folder/list?key={api_key}&fld_id={folder_id}"
@@ -40,7 +51,15 @@ def obtener_servidor(api_key):
     print(url_servidor)
     return url_servidor
 
-def listar_videos():
+def create_folder(token, folder_name):
+    url = f"https://filemoonapi.com/api/folder/create?key={token}&parent_id=0&name={folder_name}"
+    response = requests.get(url)
+    data = response.json()
+    fld_id = data["result"]["fld_id"]
+    print(fld_id)
+    return fld_id
+
+def listar_videos(artista):
     lista_videos = []
     videos = os.listdir(f"E:/datos/{artista}/videos")
     for video in videos:
@@ -96,7 +115,7 @@ def subir_archivo(ruta, api_key, url_servidor):
     except Exception as e:
         print(f"Error inesperado: {str(e)}")
 
-def procesar_csv_filemoon(ruta_csv):
+def procesar_csv_filemoon(ruta_csv, artista):
     #abrir el csv
     with open(ruta_csv, mode="r", encoding="utf-8") as file:
         lista_codigos_filemoon = []
@@ -117,38 +136,43 @@ def procesar_csv_filemoon(ruta_csv):
 
 
 # -------- programa principal --------------
-ic("---- subir a filemoon----")
-# #carga de archivos
+def main_upload_filemoon(artista):
+    ic("---- subir a filemoon----")
+    token_filemoon = os.environ.get('API_KEY_FILEMOON')
+    folder_id = ""
+    ruta_csv = f"E:/datos/Filemoon.csv"
+    # #carga de archivos
 
 
-# # ver que archivos faltan para subir, por algún error o algo, este algoritmo convierte las listas en "set"
-# # y los compara como conjuntos, para esto es necesario descargar el csv de filemoon. 
-# # no usar la primera vez!!!
+    # # ver que archivos faltan para subir, por algún error o algo, este algoritmo convierte las listas en "set"
+    # # y los compara como conjuntos, para esto es necesario descargar el csv de filemoon. 
+    # # no usar la primera vez!!!
 
-lista_filemoon = procesar_csv_filemoon(ruta_csv)
-lista_videos = listar_videos()
-set_lista_filemoon = set(lista_filemoon)
-set_lista_videos = set(lista_videos)
-diferencia_videos = set_lista_videos.difference(set_lista_filemoon)
-print(f"total de videos en filemoon: {len(set_lista_filemoon)}") 
-print(f"total de videos en carpeta: {len(lista_videos)}")
-ic(f"faltan: {len(diferencia_videos)} videos")
+    lista_filemoon = procesar_csv_filemoon(ruta_csv, artista)
+    lista_videos = listar_videos(artista)
+    set_lista_filemoon = set(lista_filemoon)
+    set_lista_videos = set(lista_videos)
+    diferencia_videos = set_lista_videos.difference(set_lista_filemoon)
+    print(f"total de videos en filemoon: {len(set_lista_filemoon)}") 
+    print(f"total de videos en carpeta: {len(lista_videos)}")
+    ic(f"faltan: {len(diferencia_videos)} videos")
 
-# accede al contenido en local para listar los archivos
-lista_rutas = listar_videos()
+    # accede al contenido en local para listar los archivos
+    lista_rutas = listar_videos(artista)
 
-#accede al csv generado por filemoon
-lista_rutas = list(diferencia_videos)
+    #accede al csv generado por filemoon
+    lista_rutas = list(diferencia_videos)
 
-for valor, ruta in enumerate(lista_rutas):
-    url_servidor = obtener_servidor(api_key)
-    respuesta = subir_archivo(ruta, api_key,url_servidor)
-    print(respuesta)
-    ic(valor)
-    time.sleep(3)
+    for valor, ruta in enumerate(lista_rutas):
+        url_servidor = obtener_servidor(token_filemoon)
+        respuesta = subir_archivo(ruta, token_filemoon,url_servidor)
+        #mover archivo a carpeta destino
+        print(respuesta)
+        ic(valor)
+        time.sleep(3)
 
-ruta_sonido = "C:/Users/diego/Desktop/windows-notify.wav"
-winsound.PlaySound(ruta_sonido, winsound.SND_FILENAME) 
+    ruta_sonido = "C:/Users/diego/Desktop/windows-notify.wav"
+    winsound.PlaySound(ruta_sonido, winsound.SND_FILENAME) 
 
 
 
