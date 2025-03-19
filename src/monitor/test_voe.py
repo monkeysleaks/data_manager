@@ -6,15 +6,16 @@ from src.api import supabase_api as db
 load_dotenv()
 
 
-artistas = db.get_data("official", "artistas")
+artistas = db.get_all_data("official", "artistas")
 
 with open("fallas.md", "w") as file:
     file.write("")
     file.close()
 
 for artista in artistas:
+    print(artista["name"])
     artista_id = artista["artista_id"]
-    data_videos = db.get_data_2_0("official", "videos", artista_id)
+    data_videos = db.get_data_eq("official", "videos", artista_id)
     for video in data_videos:
         # print(video["code_voe"])
         try:
