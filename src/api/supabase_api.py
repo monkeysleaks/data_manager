@@ -17,14 +17,14 @@ supabase: Client = create_client(
         schema="official",
     )
 )
-def get_data(schema,tabla):
+def get_all_data(schema,tabla):
     response = (
         supabase.schema(schema).table(tabla)
         .select("*")
         .execute())
     return response.data
 
-def get_data_2_0(schema,tabla, artista_id):
+def get_data_eq(schema,tabla, artista_id):
     response = (
         supabase.schema(schema).table(tabla)
         .select("*")
@@ -100,7 +100,7 @@ def abrir_json(artista):
 
 
 if __name__ == "__main__":
-    artistas  = get_data_2_0("official", "videos", 9) 
+    artistas  = get_data_eq("official", "videos", 9) 
     for video in artistas:
         print(f"{video['title']}", video["code_voe"])
 

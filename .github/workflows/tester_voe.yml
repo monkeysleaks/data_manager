@@ -23,7 +23,7 @@ jobs:
                   SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
                   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
                   API_KEY_VOE: ${{ secrets.API_KEY_VOE }}
-              run: python src/utils/test_voe.py
+              run: python src/monitor/test_voe.py
 
             - name: Subir archivo de fallas
               uses: actions/upload-artifact@v4
