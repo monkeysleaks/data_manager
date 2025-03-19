@@ -17,10 +17,9 @@ def main():
 2.- Subir filemoon
 3.- Agregar Datos a la DB
 4.- Actualizar Datos a la DB
-5.- Crear Previews
-6.- Subir Previews
-7.- Rebuild Cloudflare
-8.- Salir''')
+5.- Crear Previews y Subir Previews a Imagekit
+6.- Rebuild Cloudflare
+7.- Salir''')
             
             opcion = int(input("ingrese opcion (1-7): "))
             
@@ -65,6 +64,8 @@ def main():
 
             elif opcion == 3:
                 #agregar nuevos datos a la db
+                #agregar un método, para actualizar el archivo js buscador en el frontend,
+                # cuando se agregan nuevos datos
                 pass
 
             elif opcion == 8:

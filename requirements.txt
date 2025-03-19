@@ -3,4 +3,5 @@ python-dotenv
 icecream
 imagekitio
 opencv-python
+cloudflare
 -e .
