@@ -159,15 +159,7 @@ class Voe:
         except Exception as e:
             print(f"Error: {e}")
 
-        # 9° actualizar db
-    # time.sleep(10)
-        info_voe= Voe.info_carpeta_voe(api_key_voe, folder_id_voe)
-        
-        for dato in info_voe:
-            try:
-                db.update_data(artista, dato['filecode'], dato['name'])
-            except Exception as e:
-                print(f"Error: {e}")
+
 
 if __name__ == "__main__":
     Voe.main_upload_voe()
