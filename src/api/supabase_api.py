@@ -14,7 +14,7 @@ supabase: Client = create_client(
     url, 
     key,
     options=ClientOptions(
-        schema="pruebas",
+        schema="official",
     )
 )
 def get_data(schema,tabla):
@@ -100,9 +100,9 @@ def abrir_json(artista):
 
 
 if __name__ == "__main__":
-    artistas  = get_data("official", "artistas")
-    print(artistas)
-        
+    artistas  = get_data_2_0("official", "videos", 9) 
+    for video in artistas:
+        print(f"{video['title']}", video["code_voe"])
 
 
 

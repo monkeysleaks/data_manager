@@ -21,9 +21,9 @@ for artista in artistas:
             response = requests.get(f"https://voe.sx/{video['code_voe']}")
             if response.status_code != 200:
                 with open("fallas.md", "a") as file:
-                    file.write(f"artista: {artista}, title: {video['title']} code_voe: {video['code_voe']}\n")
+                    file.write(f"artista: {artista['name']}, title: {video['title']} code_voe: {video['code_voe']}\n")
                     file.close()
-                print(f"falla en {video['code_voe']}")
+                print(f"falla en {artista}, {video['code_voe']}")
             else:
                 print(f"video {video['title']}, {video['code_voe']} es válido")
         except Exception as e:
