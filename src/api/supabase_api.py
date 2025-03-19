@@ -41,7 +41,7 @@ def insert_data(schema, tabla,datos):
 
 def update_data(artista, code_voe, title):
     response = (
-    supabase.table(f"{artista}_videos")
+    supabase.table(f"videos")
     .update({"code_voe": code_voe})
     .eq("title", title)
     .execute()

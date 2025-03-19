@@ -2,6 +2,7 @@ import requests
 import json
 import os
 from dotenv import load_dotenv
+from icecream import ic
 
 load_dotenv()
 
@@ -41,16 +42,19 @@ class Voe:
         data = response.json()
         #  print(data)
         return data["result"]["balance"]
-
-
     
-    
+    def create_folder(token, folder_name):
+        url = f"https://voe.sx/api/folder/create?key={token}&parent_id=0&name={folder_name}"
+        response = requests.get(url)
+        data = response.json()
+        fld_id = data["result"] 
+        print(fld_id)
+        return fld_id
+       
 
+if __name__ == "__main__":
+    token = os.environ.get('API_KEY_VOE')
+    Voe.create_folder(token, "test1")
 
-
-if __name__== "__main__":
-     token = os.environ.get('API_KEY_VOE')
-     folders = Voe.get_folders(token)
-     print(folders)
      
 

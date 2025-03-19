@@ -4,9 +4,9 @@ import os
 import time
 import winsound
 from src.api import supabase_api as db
-from ssl import SSLEOFError
 from icecream import ic
 from dotenv import load_dotenv
+from src.utils.logger_base import log
 load_dotenv()
 
 
@@ -29,7 +29,7 @@ class Voe:
         #  print(data)
         return data["result"]["balance"]
 
-    def nombre_video():
+    def nombre_video(ruta):
         lista_video = os.listdir(ruta)
         return lista_video
 
@@ -59,7 +59,7 @@ class Voe:
         lista_comparacion = list(comparacion)
         return lista_comparacion
 
-    def crear_ruta(lista_comparacion):
+    def crear_ruta(lista_comparacion, artista, ruta):
         lista_rutas = []
         for ruta in lista_comparacion:
             ruta = f"E:/datos/{artista}/videos/{ruta}"
@@ -103,51 +103,71 @@ class Voe:
         except Exception as e:
             print(f"Error: {e}")
         return videos_subidos
+
+    def create_folder(token, folder_name):
+        url = f"https://voe.sx/api/folder/create?key={token}&parent_id=0&name={folder_name}"
+        response = requests.get(url)
+        data = response.json()
+        fld_id = data["result"] 
+        print(fld_id)
+        return fld_id
     
 # ---- programa principal -----------------------------------
+
+    def main_upload_voe(artista):
+        #listar variables
+        ic("----subir a voe----")
+        api_key_voe = os.environ.get('API_KEY_VOE')
+        folders = Voe.get_folders(api_key_voe)
+        for folder in folders:
+            if folder["name"] == artista:
+                folder_id_voe = folder["fld_id"]
+                break
+
+        ruta = f"E:\\datos\\{artista}\\videos"
+
+
+        # 1° listar nombres en local
+        lista_video = Voe.nombre_video(ruta)
+
+        # 2° llamar a la api
+        datos = Voe.info_carpeta_voe(api_key_voe, folder_id_voe)
+
+        # 3° filtrar datos de la carpeta en voe
+        lista_nombres_voe = Voe.obtener_nombre_voe(datos)
+        print("videos subidos: ", len(lista_nombres_voe))
+
+        #4° comparar las listas
+        lista_comparacion = Voe.comparar_videos(lista_video, lista_nombres_voe)
+        print("faltan: ", len(lista_comparacion))
+
+        # 5° crear rutas
+        lista_rutas = Voe.crear_ruta(lista_comparacion, artista, ruta)
+
+        # 7° subir archivos
+        try:
+            for numero,  ruta in enumerate(lista_rutas):
+                url_servidor = Voe.obtener_servidor(api_key_voe)
+                respuesta = Voe.subir_archivo(ruta, api_key_voe, url_servidor)
+                ic(respuesta)
+                file_code = (respuesta["file"]["file_code"])
+                ic(numero, ruta)
+                Voe.move_vid(api_key_voe, file_code, folder_id_voe)
+                time.sleep(1)
+            ruta_sonido = "C:/Users/diego/Desktop/windows-notify.wav"
+            winsound.PlaySound(ruta_sonido, winsound.SND_FILENAME) 
+        except Exception as e:
+            print(f"Error: {e}")
+
+        # 9° actualizar db
+    # time.sleep(10)
+        info_voe= Voe.info_carpeta_voe(api_key_voe, folder_id_voe)
+        
+        for dato in info_voe:
+            try:
+                db.update_data(artista, dato['filecode'], dato['name'])
+            except Exception as e:
+                print(f"Error: {e}")
+
 if __name__ == "__main__":
-    
-    #listar variables
-    ic("----subir a voe----")
-    api_key_voe = os.environ.get('API_KEY_VOE')
-    artista = input("ingrese artista: ")
-    folders = Voe.get_folders(api_key_voe)
-    for folder in folders:
-        if folder["name"] == artista:
-            folder_id_voe = folder["fld_id"]
-            break
-
-    ruta = f"E:/datos/{artista}/videos"
-
-
-    # 1° listar nombres en local
-    lista_video = Voe.nombre_video()
-
-    # 2° llamar a la api
-    datos = Voe.info_carpeta_voe(api_key_voe, folder_id_voe)
-
-    # 3° filtrar datos de la carpeta en voe
-    lista_nombres_voe = Voe.obtener_nombre_voe(datos)
-    print("videos subidos: ", len(lista_nombres_voe))
- 
-    #4° comparar las listas
-    lista_comparacion = Voe.comparar_videos(lista_video, lista_nombres_voe)
-    print("faltan: ", len(lista_comparacion))
-
-    # 5° crear rutas
-    lista_rutas = Voe.crear_ruta(lista_comparacion)
-
-    # 7° subir archivos
-    try:
-        for numero,  ruta in enumerate(lista_rutas):
-            url_servidor = Voe.obtener_servidor(api_key_voe)
-            respuesta = Voe.subir_archivo(ruta, api_key_voe, url_servidor)
-            ic(respuesta)
-            file_code = (respuesta["file"]["file_code"])
-            ic(numero, ruta)
-            Voe.move_vid(api_key_voe, file_code, folder_id_voe)
-            time.sleep(1)
-        ruta_sonido = "C:/Users/diego/Desktop/windows-notify.wav"
-        winsound.PlaySound(ruta_sonido, winsound.SND_FILENAME) 
-    except Exception as e:
-        print(f"Error: {e}")
+    Voe.main_upload_voe()
