@@ -13,7 +13,7 @@ def obtener_id_deploment():
         account_id=os.getenv("CF_ACCOUNT_ID"),
     )
     page = page.result[0]
-    print(page.id)
+    # print(page.id)
     return page.id
 
 def retry_deployment(deploy_id):
@@ -24,14 +24,13 @@ def retry_deployment(deploy_id):
         body={},
     )
 
-    print(deployment.id)
-if __name__ == "__main__":
-    import os
-    from cloudflare import Cloudflare
+    # print(deployment.id)
+def main():
+   
 
     client = Cloudflare(
-        api_email="probando.ai01@gmail.com",  # This is the default and can be omitted
-        api_key="a4a968f1f63f4f056d76bfa48d5942bea60b7",  # This is the default and can be omitted
+        api_email=os.environ.get("CLOUDFLARE_EMAIL"),  # This is the default and can be omitted
+        api_key=os.environ.get("CLOUDFLARE_API_KEY"),  # This is the default and can be omitted
     )
     deploy_id =obtener_id_deploment()
     retry_deployment(deploy_id)
