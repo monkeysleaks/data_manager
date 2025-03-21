@@ -23,6 +23,7 @@ jobs:
                   SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
                   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
                   API_KEY_VOE: ${{ secrets.API_KEY_VOE }}
+                  API_KEY_FILEMOON: ${{ secrets.API_KEY_FILEMOON }}
                   CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
                   CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
                   CF_PROJECT_NAME: ${{ secrets.CF_PROJECT_NAME }}
