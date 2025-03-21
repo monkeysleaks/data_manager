@@ -114,10 +114,11 @@ def main():
                         if subopcion4 == 1:
                             artista = input("ingrese artista: ")
                             update_data.main(artista)
+                            ic(f"--- Datos actualizados para {artista} ---")
                         elif subopcion4 == 2:
                             break
 
-                #opcion 5 crear y subir las previews sin funcionar aun
+                #opcion 5 crear y subir las previews (sin implementar) 
                 elif opcion == 5:
                     #crear las previews, hay que mejorar la calidad de la salida
                     pass
