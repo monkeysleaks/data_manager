@@ -1,0 +1,31 @@
+name : rebuild
+
+on: 
+    workflow_dispatch:  
+
+jobs:
+    run-python-script:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Clonar el repositorio
+              uses: actions/checkout@v4
+
+            - name: Configurar Python
+              uses: actions/setup-python@v4
+              with:
+                python-version: '3.10'
+            
+            - name: Instalar dependencias
+              run: pip install -r requirements.txt
+
+            - name: Ejecutar script
+              env: 
+                CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
+                CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
+                CF_PROJECT_NAME: ${{ secrets.CF_PROJECT_NAME }}
+                CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+                API_KEY_VOE: ${{ secrets.API_KEY_VOE }}
+                API_KEY_FILEMOON: ${{ secrets.API_KEY_FILEMOON }}
+              run: python src/monitor/test_voe.py
+
+            
