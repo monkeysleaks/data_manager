@@ -40,15 +40,19 @@ def main():
                         if subopcion1 == 1:
                             artista = input("ingrese artista: ")
                             Voe.main_upload_voe(artista)
+                            ic(f"{artista} subido a voe")
                             opcionde_bd = input("actualizar db? 1-si 2-no: ")
                             if opcionde_bd == "1":
                                 update_data.main(artista)
+                                ic(f"DB actualizada {artista}")
                             elif opcionde_bd == "2":
                                 break
                         elif subopcion1 == 2:
                             artista = input("ingrese artista: ")
                             Voe.create_folder(token_voe, artista)
+                            ic(f"carpeta {artista} creada")
                             Voe.main_upload_voe(artista)
+                            ic(f"{artista} subido a voe")
                         elif subopcion1 == 3:
                             break
             
@@ -96,7 +100,7 @@ def main():
                         elif subopcion4 == 2:
                             break
 
-                #opcion 5 crear y subir las previews
+                #opcion 5 crear y subir las previews sin funcionar aun
                 elif opcion == 5:
                     #crear las previews, hay que mejorar la calidad de la salida
                     pass
@@ -115,6 +119,7 @@ def main():
                         elif subopcion6 == 2:
                             break
                 
+                #salir
                 elif opcion == 7:
 
                     ic("Saludos Que Tengas Buen día")
