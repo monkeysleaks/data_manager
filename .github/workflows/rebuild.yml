@@ -28,6 +28,6 @@ jobs:
                 API_KEY_FILEMOON: ${{ secrets.API_KEY_FILEMOON }}
                 SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
                 SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-              run: python src/monitor/test_voe.py
+              run: python src/utils/rebuild.py
 
             
