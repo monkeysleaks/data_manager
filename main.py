@@ -21,7 +21,7 @@ def main():
     2.- Subir filemoon
     3.- Agregar Datos a la DB
     4.- Actualizar Datos a la DB
-    5.- Crear Previews y Subir Previews a Imagekit
+    5.- Crear Previews y Subir Previews a Imagekit (sin implementar)
     6.- Rebuild Cloudflare
     7.- Salir''')
                 
@@ -81,25 +81,35 @@ def main():
                 
                 #opcion 3 agregar nuevos datos a la db sin función por ahora
                 elif opcion == 3:
-                    #agregar un método, para actualizar el archivo js buscador en el frontend, cuando se agregan nuevos datos
-                    artista = input("ingrese artista: ")
-                    folders_voe = Voe.get_folders(token_voe)
-                    for folder in folders_voe:
-                        if folder["name"] == artista:
-                            fld_voe = folder["fld_id"]
+                    while True:
+                        ic("--- Agregar Datos a la DB ---")
+                        print('''
+            1.- Agregar Datos a la DB
+            2.- Volver Atrás
+''')
+                        subopcion3 = int(input("ingrese opción (1-2): "))
+                        if subopcion3 == 1:
+                            artista = input("ingrese artista: ")
+                            folders_voe = Voe.get_folders(token_voe)
+                            for folder in folders_voe:
+                                if folder["name"] == artista:
+                                    fld_voe = folder["fld_id"]
+                                    break
+                            add_data.main(artista, fld_voe)
+                            ic(f"Datos agregados de {artista} a la db")
+                        elif subopcion3 == 2:
                             break
-                    
-                    add_data.main(artista, fld_voe)
-                    ic(f"Datos agregados de {artista} a la db")
+                    #agregar un método, para actualizar el archivo js buscador en el frontend, cuando se agregan nuevos 
 
                 #opcion 4 actualizar datos de una determinada artista
                 elif opcion == 4:
-                    ic("--- Actualizar Datos ---")
-                    print('''
+                    
+                    while True:
+                        ic("--- Actualizar Datos ---")
+                        print('''
             1.- Actualizar Base de Datos
             2.- Volver Atrás
 ''')
-                    while True:
                         subopcion4 = int(input("ingrese opción (1-2): "))
                         if subopcion4 == 1:
                             artista = input("ingrese artista: ")
@@ -114,13 +124,14 @@ def main():
                 
                 # rebuild de proyecto en cloudflare
                 elif opcion == 6:
-                    ic("---- hacer la rebuild en clouflare ----")
-                    print('''
+                    
+                    subopcion6 = int(input("ingrese opción (1-2): "))
+                    while True:
+                        ic("---- hacer la rebuild en clouflare ----")
+                        print('''
             1.- Hacer Rebuild
             2.- Volver Atrás
                     ''')
-                    subopcion6 = int(input("ingrese opción (1-2): "))
-                    while True:
                         if subopcion6 == 1:
                             rebuild.main()
                         elif subopcion6 == 2:
