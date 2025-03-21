@@ -1,6 +1,7 @@
 from src.upload.uploader_voe import Voe
 from src.upload import uploader_filemoon as filemoon
 from src.database import update_data
+from src.database import add_data 
 from src.utils import rebuild
 from dotenv import load_dotenv
 from icecream import ic
@@ -80,11 +81,15 @@ def main():
                 
                 #opcion 3 agregar nuevos datos a la db sin función por ahora
                 elif opcion == 3:
-                    #agregar nuevos datos a la db
-                    #agregar un método, para actualizar el archivo js buscador en el frontend,
-                    # cuando se agregan nuevos datos
-                    pass
-
+                    #agregar un método, para actualizar el archivo js buscador en el frontend, cuando se agregan nuevos datos
+                    folders_voe = Voe.get_folders(token_voe)
+                    for folder in folders_voe:
+                        if folder["name"] == artista:
+                            fld_voe = folder["fld_id"]
+                            break
+                    add_data.main(artista, fld_voe)
+                    ic(f"Datos agregados de {artista} a la db")
+                    
                 #opcion 4 actualizar datos de una determinada artista
                 elif opcion == 4:
                     ic("--- Actualizar Datos ---")
