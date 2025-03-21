@@ -126,13 +126,13 @@ def main():
                 # rebuild de proyecto en cloudflare
                 elif opcion == 6:
                     
-                    subopcion6 = int(input("ingrese opción (1-2): "))
                     while True:
                         ic("---- hacer la rebuild en clouflare ----")
                         print('''
             1.- Hacer Rebuild
             2.- Volver Atrás
                     ''')
+                        subopcion6 = int(input("ingrese opción (1-2): "))
                         if subopcion6 == 1:
                             rebuild.main()
                         elif subopcion6 == 2:

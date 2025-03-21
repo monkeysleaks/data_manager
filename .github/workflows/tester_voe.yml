@@ -23,6 +23,10 @@ jobs:
                   SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
                   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
                   API_KEY_VOE: ${{ secrets.API_KEY_VOE }}
+                  CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
+                  CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
+                  CF_PROJECT_NAME: ${{ secrets.CF_PROJECT_NAME }}
+                  CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
               run: python src/monitor/test_voe.py
 
             - name: Subir archivo de fallas
