@@ -34,6 +34,7 @@ def main():
     )
     deploy_id =obtener_id_deploment()
     retry_deployment(deploy_id)
+    print("ejecucion completa") 
 
 if __name__ == "__main__":
      main()
