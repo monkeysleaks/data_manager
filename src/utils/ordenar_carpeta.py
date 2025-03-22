@@ -84,9 +84,10 @@ def ordenar_carpeta(carpeta):
             print(f"{archivo} movido a la carpeta de videos.")
 
 def main(artista, carpeta_origen):
-    carpeta_destino = f"E:/datos/{artista}"
+    
 
     if carpeta_origen == "telegram":
+        carpeta_destino = f"E:/datos/{artista}"
         carpeta_telegram = "C:/Users/diego/Downloads/Telegram Desktop"
         renombrar_archivos(carpeta_telegram)
         crear_carpeta(carpeta_destino)
@@ -95,9 +96,13 @@ def main(artista, carpeta_origen):
 
     elif carpeta_origen == "descargas":
         carpeta_descargas = f"E:/descargas/{artista}"
-    
+        carpeta_destino = f"E:/datos/{artista}"
+
         renombrar_archivos(carpeta_descargas)
         crear_carpeta(carpeta_destino)
         mover_archivos(carpeta_descargas, carpeta_destino)
         ordenar_carpeta(carpeta_destino)
+if __name__ == "__main__":
+    artista = input("ingrese artista: ")
+    main(artista, "descargas")
 

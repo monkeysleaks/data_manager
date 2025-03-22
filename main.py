@@ -24,7 +24,8 @@ def main():
     4.- Actualizar Datos a la DB
     5.- Crear Previews y Subir Previews a Imagekit (sin implementar)
     6.- Rebuild Cloudflare
-    7.- Salir''')
+    7.- Ordenar carpeta
+    8.- Salir''')
                 
                 opcion = int(input("ingrese opcion (1-7): "))
                 
@@ -139,7 +140,7 @@ def main():
                         elif subopcion6 == 2:
                             break
                 
-                #ordernar carpeta
+                #ordenar carpeta
                 elif opcion == 7:
                     while True:
                         ic("---- ordenar carpeta ----")
@@ -150,9 +151,11 @@ def main():
 ''')
                         subopcion7 = int(input("ingrese la carpeta de origen (1-3): "))
                         if subopcion7 == 1:
-                            order.main("artista", "telegram")
+                            artista = input("ingrese artista: ")
+                            order.main(artista, "telegram")
                         elif subopcion7 == 2:
-                            order.main("artista", "descargas")
+                            artista = input("ingrese artista: ")
+                            order.main(artista, "descargas")
                         elif subopcion7 == 3:
                             break
                 #salir
