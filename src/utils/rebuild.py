@@ -29,8 +29,8 @@ def main():
    
 
     client = Cloudflare(
-        api_email=os.environ.get.get("CLOUDFLARE_EMAIL"),  # This is the default and can be omitted
-        api_key=os.environ.get.get("CLOUDFLARE_API_KEY"),  # This is the default and can be omitted
+        api_email=os.environ.get("CLOUDFLARE_EMAIL"),  # This is the default and can be omitted
+        api_key=os.environ.get("CLOUDFLARE_API_KEY"),  # This is the default and can be omitted
     )
     try:
         deploy_id = obtener_id_deploment()
