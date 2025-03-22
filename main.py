@@ -3,6 +3,7 @@ from src.upload import uploader_filemoon as filemoon
 from src.database import update_data
 from src.database import add_data 
 from src.utils import rebuild
+from src.utils import ordenar_carpeta as order
 from dotenv import load_dotenv
 from icecream import ic
 import os
@@ -138,8 +139,24 @@ def main():
                         elif subopcion6 == 2:
                             break
                 
-                #salir
+                #ordernar carpeta
                 elif opcion == 7:
+                    while True:
+                        ic("---- ordenar carpeta ----")
+                        print('''
+            1.- Telegram
+            2.- Descargas
+            3.- Volver Atrás
+''')
+                        subopcion7 = int(input("ingrese la carpeta de origen (1-3): "))
+                        if subopcion7 == 1:
+                            order.main("artista", "telegram")
+                        elif subopcion7 == 2:
+                            order.main("artista", "descargas")
+                        elif subopcion7 == 3:
+                            break
+                #salir
+                elif opcion == 8:
 
                     ic("Saludos Que Tengas Buen día")
                     break
