@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+from icecream import ic
 from dotenv import load_dotenv  
 load_dotenv()
 
@@ -38,10 +39,28 @@ def get_data_folder_filemoon(artista):
         return data["result"]["files"]
     else:
         print(response)
-        
-if __name__ == "__main__":
-    artista = "alitaaa"
+
+def move_folder_filemoon(token_filemoon, filecode, folder_id_destino):
+    url = f"https://filemoonapi.com/api/file/clone?key={token_filemoon}&file_code={filecode}&fld_id={folder_id_destino}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json() # recibe los datos en formato json
+        print(data)
+    else:
+        print(response)
     
-    data_videos_filemoon = get_data_folder_filemoon(artista)
-    for dato in data_videos_filemoon:
-        print(dato["title"], dato["file_code"])
+def delete_file_filemoon(token_filemoon, filecode):
+    url = f"https://filemoonapi.com/api/file/move?key={token_filemoon}&file_code={filecode}&fld_id="  
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json() # recibe los datos en formato json
+        print(data)
+    else:
+        print(response)
+
+if __name__ == "__main__":
+    artista = "sopaipaposting"
+    title = "QySaEJSB.m4v"
+    filecode = "57lkveuzuy98"
+    delete_file_filemoon(token_filemoon, filecode)
+    

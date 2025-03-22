@@ -37,7 +37,8 @@ def insert_data(schema, tabla,datos):
     supabase.schema(schema).table(tabla)
     .insert(datos)
     .execute())
-    ic(response)
+    print(response.data)
+    return response.data
 
 def update_data(artista, code_voe, title):
     response = (

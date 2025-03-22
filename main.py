@@ -27,7 +27,7 @@ def main():
     7.- Ordenar carpeta
     8.- Salir''')
                 
-                opcion = int(input("ingrese opcion (1-7): "))
+                opcion = int(input("ingrese opcion (1-8): "))
                 
                 #opcion 1 subir archivos a voe
                 if opcion == 1:
@@ -72,11 +72,11 @@ def main():
                         if subopcion2 == 1:
                             artista = input("ingrese artista: ")
                             filemoon.create_folder(token_filemoon, artista)
-                            # filemoon.main_upload_filemoon(artista)
+                            filemoon.main_upload_filemoon(artista)
 
                         elif subopcion2 == 2:
                             artista = input("ingrese artista: ")
-                            pass
+                            filemoon.main_upload_filemoon(artista)
 
                         elif subopcion2 == 3:
                             break
@@ -91,14 +91,14 @@ def main():
 ''')
                         subopcion3 = int(input("ingrese opción (1-2): "))
                         if subopcion3 == 1:
-                            artista = input("ingrese artista: ")
+                            artista_agregar = input("ingrese artista: ")
                             folders_voe = Voe.get_folders(token_voe)
                             for folder in folders_voe:
-                                if folder["name"] == artista:
+                                if folder["name"] == artista_agregar:
                                     fld_voe = folder["fld_id"]
                                     break
-                            add_data.main(artista, fld_voe)
-                            ic(f"Datos agregados de {artista} a la db")
+                            add_data.main(artista_agregar, fld_voe)
+                            ic(f"Datos agregados de {artista_agregar} a la db")
                         elif subopcion3 == 2:
                             break
                     #agregar un método, para actualizar el archivo js buscador en el frontend, cuando se agregan nuevos 

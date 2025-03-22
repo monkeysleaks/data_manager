@@ -6,6 +6,7 @@ import time
 import csv
 from icecream import ic
 import winsound
+from src.api import filemoon
 
 
 
@@ -63,7 +64,7 @@ def listar_videos(artista):
     lista_videos = []
     videos = os.listdir(f"E:/datos/{artista}/videos")
     for video in videos:
-        lista_videos.append(f"E:/datos/{artista}/videos/{video}")
+        lista_videos.append(f"E:/datos/{artista}/videos/{video.rsplit('.',1)[0]}")
     return lista_videos
 
 def subir_archivo(ruta, api_key, url_servidor):
@@ -115,58 +116,58 @@ def subir_archivo(ruta, api_key, url_servidor):
     except Exception as e:
         print(f"Error inesperado: {str(e)}")
 
-def procesar_csv_filemoon(ruta_csv, artista):
+def titles_filemoon(artista):
     #abrir el csv
-    with open(ruta_csv, mode="r", encoding="utf-8") as file:
-        lista_codigos_filemoon = []
-        csv_reader = csv.DictReader(file)
-         #procesar el csv
-        for fila in csv_reader:
-            nombre_archivo = fila["file name"]
-            url = fila["url"]
+    lista_titles_filemoon = []
+    data = filemoon.get_data_folder_filemoon(artista)
+    for video in data:
+        title = video["link"].rsplit("/",1)[1]
+        lista_titles_filemoon.append(title)
 
-            #extraer una porción de la url
-            code_filemoon = url.split("/")[-1]  #toma la parte después del /e/
-
-            ruta_csv = f'E:/datos/{artista}/videos/{nombre_archivo}'
-            
-             #añadir los dicionarios
-            lista_codigos_filemoon.append(ruta_csv)
-    return lista_codigos_filemoon
+    return lista_titles_filemoon
 
 
 # -------- programa principal --------------
 def main_upload_filemoon(artista):
     ic("---- subir a filemoon----")
     token_filemoon = os.environ.get('API_KEY_FILEMOON')
-    folder_id = ""
-    ruta_csv = f"E:/datos/Filemoon.csv"
-    # #carga de archivos
-
-
-    # # ver que archivos faltan para subir, por algún error o algo, este algoritmo convierte las listas en "set"
-    # # y los compara como conjuntos, para esto es necesario descargar el csv de filemoon. 
-    # # no usar la primera vez!!!
-
-    lista_filemoon = procesar_csv_filemoon(ruta_csv, artista)
-    lista_videos = listar_videos(artista)
+    folders = filemoon.get_folders_filemoon(token_filemoon)
+    for folder in folders:
+        if folder["name"] == artista:
+            folder_id = folder["fld_id"]
+            break
+  
+    lista_nombres_local = []
+    lista_filemoon = titles_filemoon(artista)
+   
+    lista_videos = os.listdir(f"E:/datos/{artista}/videos")
+    for i in lista_videos:
+        lista_nombres_local.append(i)
+    
     set_lista_filemoon = set(lista_filemoon)
-    set_lista_videos = set(lista_videos)
-    diferencia_videos = set_lista_videos.difference(set_lista_filemoon)
+    set_lista_videos_local = set(lista_nombres_local)
+    diferencia_videos = set_lista_videos_local.difference(set_lista_filemoon)
     print(f"total de videos en filemoon: {len(set_lista_filemoon)}") 
-    print(f"total de videos en carpeta: {len(lista_videos)}")
+    print(f"total de videos en carpeta: {len(lista_nombres_local)}")
     ic(f"faltan: {len(diferencia_videos)} videos")
 
-    # accede al contenido en local para listar los archivos
-    lista_rutas = listar_videos(artista)
-
-    #accede al csv generado por filemoon
+    #crear los path usando el nombre del video, incluida la extension
     lista_rutas = list(diferencia_videos)
+    lista_path = []
+    for ruta in lista_rutas:
+        lista_path.append(f"E:/datos/{artista}/videos/{ruta}")
+    # print(lista_path)
 
-    for valor, ruta in enumerate(lista_rutas):
+    #subir y mover los archvivos
+    for valor, ruta in enumerate(lista_path):
         url_servidor = obtener_servidor(token_filemoon)
         respuesta = subir_archivo(ruta, token_filemoon,url_servidor)
-        #mover archivo a carpeta destino
+        files = respuesta["files"]
+        for file in files:
+            filecode = file["filecode"]
+            print(filecode)
+            break
+        filemoon.move_folder_filemoon(token_filemoon, filecode, folder_id)
         print(respuesta)
         ic(valor)
         time.sleep(3)
@@ -174,7 +175,9 @@ def main_upload_filemoon(artista):
     ruta_sonido = "C:/Users/diego/Desktop/windows-notify.wav"
     winsound.PlaySound(ruta_sonido, winsound.SND_FILENAME) 
 
-
+if __name__ == "__main__":
+    artista = "sopaipaposting"
+    main_upload_filemoon(artista)
 
             
             

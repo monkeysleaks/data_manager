@@ -2,9 +2,11 @@
 from src.api import supabase_api as db
 from src.api.voe import Voe
 from src.api import filemoon
+from src.utils import logger_base as log
 import os
 import requests
 from icecream import ic
+import time
 """
 1.- llamar a la api de voe
 2.- llamar a la api de filemoon
@@ -47,7 +49,7 @@ def convertir_a_MB(peso):
     
     return peso
 
-def cruzar_datos(data_videos_voe, data_videos_filemoon):
+def cruzar_datos(artista, data_videos_voe, data_videos_filemoon, artista_id):
     data_videos_voe = get_data_folder_voe(artista)
     # ic(data_videos_voe)
     data_videos_filemoon = filemoon.get_data_folder_filemoon(artista)
@@ -60,6 +62,7 @@ def cruzar_datos(data_videos_voe, data_videos_filemoon):
             if dato_voe["title"].rsplit(".")[0] == dato_filemoon["title"]:
                 
                 info = {
+    "artista_id": artista_id,
     "title": f"{dato_voe['title']}",
     "code_voe": f"{dato_voe['filecode']}",
     "code_filemoon": f"{dato_filemoon['file_code']}",
@@ -74,14 +77,29 @@ def cruzar_datos(data_videos_voe, data_videos_filemoon):
 
 
 def main(artista, fld_voe):
-  db.insert_data("official", "artistas", {"name": artista, "fld_voe": fld_voe})
-  data_videos_voe = get_data_folder_voe(artista)
-  data_videos_filemoon = filemoon.get_data_folder_filemoon(artista)
-  datos = cruzar_datos(data_videos_voe, data_videos_filemoon)
-  for dato in datos:
-      db.insert_data("official", "videos", dato)
+    try:
+        res = db.insert_data("official", "artistas", {"name": artista, "fld_voe": fld_voe})
+        for dato in res:
+            artista_id = (dato["artista_id"])
+
+        data_videos_voe = get_data_folder_voe(artista)
+        data_videos_filemoon = filemoon.get_data_folder_filemoon(artista)
+        datos = cruzar_datos(artista, data_videos_voe, data_videos_filemoon, artista_id)
+        for dato in datos:
+            db.insert_data("official", "videos", dato)
+            
+    except Exception as e:
+        print(f"Error en add_data: {e}")
 
 
 if __name__ == "__main__":
-    artista = "alitaaa"
-    main(artista, 1)
+    token_voe = os.environ.get('API_KEY_VOE')
+
+    artista_agregar = input("ingrese artista: ")
+    folders_voe = Voe.get_folders(token_voe)
+    for folder in folders_voe:
+        if folder["name"] == artista_agregar:
+            fld_voe = folder["fld_id"]
+            break
+    main(artista_agregar, fld_voe)
+    ic(f"Datos agregados de {artista_agregar} a la db")
