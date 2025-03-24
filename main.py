@@ -4,6 +4,8 @@ from src.database import update_data
 from src.database import add_data 
 from src.utils import rebuild
 from src.utils import ordenar_carpeta as order
+from src.utils import prev_img
+from src.upload import upload_imagekit as imagekit
 from dotenv import load_dotenv
 from icecream import ic
 import os
@@ -22,7 +24,7 @@ def main():
     2.- Subir filemoon
     3.- Agregar Datos a la DB
     4.- Actualizar Datos a la DB
-    5.- Crear Previews y Subir Previews a Imagekit (sin implementar)
+    5.- Crear Previews y Subir Previews a Imagekit 
     6.- Rebuild Cloudflare
     7.- Ordenar carpeta
     8.- Salir''')
@@ -120,10 +122,33 @@ def main():
                         elif subopcion4 == 2:
                             break
 
-                #opcion 5 crear y subir las previews (sin implementar) 
+                #opcion 5 crear y subir las previews 
                 elif opcion == 5:
                     #crear las previews, hay que mejorar la calidad de la salida
-                    pass
+                    while True:
+                        ic("--- Crear Previews ---")
+                        print('''
+            1.- Crear Previews
+            2.- upload imagekit
+            3.- Volver Atrás
+''')
+                        subopcion5 = int(input("ingrese opción (1-2): "))
+                        if subopcion5 == 1:
+                            artista = input("ingrese artista: ")
+                            prev_img.main(artista)
+                            print("previews creados")
+                            print("subir a imagekit? 1-si 2-no")
+                            opcion_imgkit = int(input("ingrese opcion (1-2): "))
+                            if opcion_imgkit == 1:
+                                imagekit.main(artista)
+                                print("subido a imagekit")
+                            elif opcion_imgkit == 2:
+                                pass
+                        elif subopcion5 == 2:
+                            artista = input("ingrese artista: ")
+                            imagekit.main(artista)
+                        elif subopcion5 == 3:
+                            break
                 
                 # rebuild de proyecto en cloudflare
                 elif opcion == 6:
