@@ -22,9 +22,9 @@ def main():
                 print('''
     1.- Subir voe
     2.- Subir filemoon
-    3.- Agregar Datos a la DB
-    4.- Actualizar Datos a la DB
-    5.- Crear Previews y Subir Previews a Imagekit 
+    3.- Base de Datos
+    4.- Portalnet
+    5.- creación y subida de img
     6.- Rebuild Cloudflare
     7.- Ordenar carpeta
     8.- Salir''')
@@ -83,25 +83,54 @@ def main():
                         elif subopcion2 == 3:
                             break
                 
-                #opcion 3 agregar nuevos datos a la db sin función por ahora
+                #opcion agregar o actulizar los datos
                 elif opcion == 3:
                     while True:
-                        ic("--- Agregar Datos a la DB ---")
+                        ic("--- Base de Datos ---")
                         print('''
             1.- Agregar Datos a la DB
-            2.- Volver Atrás
-''')
-                        subopcion3 = int(input("ingrese opción (1-2): "))
+            2.- Actualizar datos
+            3.- Volver Atrás
+''')                    
+                        subopcion3 = int(input("ingrese opción (1-3): "))
+                        #agregar nuevos datos a la db 
                         if subopcion3 == 1:
-                            artista_agregar = input("ingrese artista: ")
-                            folders_voe = Voe.get_folders(token_voe)
-                            for folder in folders_voe:
-                                if folder["name"] == artista_agregar:
-                                    fld_voe = folder["fld_id"]
+                            while True:
+                                ic("--- Agregar Datos a la DB ---")
+                                print('''
+                    1.- Agregar Datos a la DB
+                    2.- Volver Atrás
+        ''')
+                                subopcion3 = int(input("ingrese opción (1-2): "))
+                                if subopcion3 == 1:
+                                    artista_agregar = input("ingrese artista: ")
+                                    folders_voe = Voe.get_folders(token_voe)
+                                    for folder in folders_voe:
+                                        if folder["name"] == artista_agregar:
+                                            fld_voe = folder["fld_id"]
+                                            break
+                                    add_data.main(artista_agregar, fld_voe)
+                                    ic(f"Datos agregados de {artista_agregar} a la db")
+                                else:
                                     break
-                            add_data.main(artista_agregar, fld_voe)
-                            ic(f"Datos agregados de {artista_agregar} a la db")
+                                    
+                        #actualizar datos db
                         elif subopcion3 == 2:
+                            while True:
+                                ic("--- Actualizar Datos ---")
+                                print('''
+                    1.- Actualizar Base de Datos
+                    2.- Volver Atrás
+        ''')
+                                subopcion4 = int(input("ingrese opción (1-2): "))
+                                if subopcion4 == 1:
+                                    artista = input("ingrese artista: ")
+                                    update_data.main(artista)
+                                    ic(f"--- Datos actualizados para {artista} ---")
+                                elif subopcion4 == 2:
+                                    break
+
+                        elif subopcion3 == 3:
                             break
                     #agregar un método, para actualizar el archivo js buscador en el frontend, cuando se agregan nuevos 
 

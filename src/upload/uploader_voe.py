@@ -146,18 +146,23 @@ class Voe:
 
         # 7° subir archivos
         try:
+            lista_subidos = []
             for numero,  ruta in enumerate(lista_rutas):
                 url_servidor = Voe.obtener_servidor(api_key_voe)
                 respuesta = Voe.subir_archivo(ruta, api_key_voe, url_servidor)
+                lista_subidos.append(respuesta["file"]["file_code"])
                 ic(respuesta)
                 file_code = (respuesta["file"]["file_code"])
+                lista_subidos.append(file_code) 
                 ic(numero, ruta)
                 Voe.move_vid(api_key_voe, file_code, folder_id_voe)
-                time.sleep(1)
+
             ruta_sonido = "C:/Users/diego/Desktop/windows-notify.wav"
             winsound.PlaySound(ruta_sonido, winsound.SND_FILENAME) 
+            return lista_subidos
         except Exception as e:
             print(f"Error: {e}")
+        
 
 
 
