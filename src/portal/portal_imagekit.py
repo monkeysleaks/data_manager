@@ -42,10 +42,13 @@ def subir_img(artista, lista_split):
 
 
 #----- programa principal -------
-if __name__ == "__main__":
+def main(artista):
     
-    artista = input("nombre artista: ")
+    
     lista_split = crear_path(artista)
     
     subir_img(artista, lista_split)
     print(f"imgs {artista}, subido")
+
+if __name__ == "__main__":
+    main()

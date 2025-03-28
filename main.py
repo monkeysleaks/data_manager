@@ -6,6 +6,9 @@ from src.utils import rebuild
 from src.utils import ordenar_carpeta as order
 from src.utils import prev_img
 from src.upload import upload_imagekit as imagekit
+import src.portal.post_portal as post_portal
+import src.portal.download_img_voe as download_img_voe
+import src.portal.portal_imagekit as portal_imagekit
 from dotenv import load_dotenv
 from icecream import ic
 import os
@@ -134,22 +137,29 @@ def main():
                             break
                     #agregar un método, para actualizar el archivo js buscador en el frontend, cuando se agregan nuevos 
 
-                #opcion 4 actualizar datos de una determinada artista
+                #opcion 4 portal
                 elif opcion == 4:
-                    
                     while True:
-                        ic("--- Actualizar Datos ---")
+                        ic("--- Portal ---")
                         print('''
-            1.- Actualizar Base de Datos
-            2.- Volver Atrás
+            1.- Crear Post
+            2.- obtener prevs
+            3.- subir prevs
+            4.- Volver Atrás
 ''')
-                        subopcion4 = int(input("ingrese opción (1-2): "))
+                        subopcion4 = int(input("ingrese opción (1-4): "))
                         if subopcion4 == 1:
                             artista = input("ingrese artista: ")
-                            update_data.main(artista)
-                            ic(f"--- Datos actualizados para {artista} ---")
+                            post_portal.main(artista)
                         elif subopcion4 == 2:
+                            artista = input("ingrese artista: ")
+                            download_img_voe.main(artista)
+                        elif subopcion4 == 3:
+                            artista = input("ingrese artista: ")
+                            portal_imagekit.main(artista)
+                        elif subopcion4 == 4:
                             break
+                    
 
                 #opcion 5 crear y subir las previews 
                 elif opcion == 5:
