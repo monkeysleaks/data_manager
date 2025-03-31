@@ -60,13 +60,14 @@ def create_template(datos_filtrados, artista,title):
     elemento = list(filter(lambda item: item["title"] == title, datos_filtrados))
     nombre = (elemento[0]["title"].rsplit(".",1))
     print(f'''
-            [URL=https://ik.imagekit.io/bhba8douv/{artista}/{nombre[0]}?tr=w-350,h-350,c-contain]
-            [IMG]https://ik.imagekit.io/bhba8douv/{artista}/{nombre[0]}?tr=w-350,h-350,c-contain[/IMG][/URL]
-            filesize: {elemento[0]["file_size"]}
-            Resolution: 1280x720
-            Duration: {elemento[0]["length"]}
-            https://voe.sx/e/{elemento[0]["code_voe"]}
-            descarga''')
+[URL=https://ik.imagekit.io/bhba8douv/{artista}/{nombre[0]}?tr=w-350,h-350,c-contain]
+[IMG]https://ik.imagekit.io/bhba8douv/{artista}/{nombre[0]}?tr=w-350,h-350,c-contain[/IMG][/URL]
+filesize: {elemento[0]["file_size"]}
+Resolution: 1280x720
+Duration: {elemento[0]["length"]}
+https://voe.sx/e/{elemento[0]["code_voe"]}
+descarga
+''')
     return elemento
             
 #actualiza db columna portal
@@ -93,7 +94,7 @@ def main(artista):
     datos_filtrados = data_filter(datos)
     title = input("ingrese el nombre del video: ")
     elemento = create_template(datos_filtrados, artista, title)
-    ic(elemento)
+    # ic(elemento)
     update_db(artista, id= elemento[0]["video_id"])
 
 if __name__ == "__main__":
